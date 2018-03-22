@@ -15,12 +15,31 @@
 import sys
 import re
 import urllib
+import requests
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-def download_image( img_url, local_save_repo, local_filename ):
-	urllib.urlretrieve( img_url, local_save_repo+local_filename)
+def download_image_urllib( img_url, local_save_repo, local_filename ):
+	try:
+		urllib.urlretrieve( img_url, local_save_repo+local_filename)
+	except IOError as e:
+		print("IO Error")
+	except Exception as e:
+		print("Exception occurs.")
 	return
+
+def download_image_request( img_url, local_save_repo, local_filename):
+	try:
+		img_obj = requests.get(img_url, timeout=10)
+	except Exception as e:
+		print("Exception occurs.")
+		return False
+	local_img_dir = local_save_repo + local_filename
+	fp = open(local_img_dir, "wb")
+	fp.write(img_obj.content)
+	fp.close()
+	return True
+
 
 def tester_main():
 	"""

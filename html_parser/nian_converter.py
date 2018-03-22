@@ -7,7 +7,6 @@ import img_download as my_img
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-
 class my_post(object):
 	def __init__(self):
 		self.post_time = None
@@ -17,7 +16,6 @@ class my_post(object):
 
 	def get_my_post_time(self):
 		return
-
 
 # First task, the parser should match any photo url in the html file
 # Then, it should download the photo. We can either store them or write them direclty
@@ -37,6 +35,8 @@ def get_inline_pic_url(line):
 # Then, it should direclty output the paragraph to the word file
 
 def global_main():
+	my_html.init_global_list()
+
 	file_dir = raw_input("Please input the file directory: ")
 	#file_dir = './simple_example.html'
 	file_name = None
@@ -46,11 +46,12 @@ def global_main():
 		file_name = re.match(r"(.*).html", file_dir, re.M|re.I).group(1)
 	#print file_name
 	#return # for file_name parser test
+	local_bad_img_url = "./resources/bad_img.png"
 
-	image_repo = "./resources/%s/" %(file_name)
-	image_repo_exist = os.path.exists(image_repo)
-	if not image_repo_exist:
-		os.makedirs(image_repo)
+	local_image_repo = "./resources/%s/" %(file_name)
+	local_image_repo_exist = os.path.exists(local_image_repo)
+	if not local_image_repo_exist:
+		os.makedirs(local_image_repo)
 
 	output_filename = "./local_%s.html" %(file_name)
 	output_fp = open(output_filename, 'w')
@@ -62,23 +63,31 @@ def global_main():
 			if my_html.pic_match(line):
 				img_count += 1
 				curr_pic_url = my_html.div_pic_match(line)
-				local_pic_url = image_repo+"%d.jpg" %(img_count)
-				next_pic_url = image_repo+"%d.jpg" %(img_count+1)
+				local_pic_name = "%d.jpg" %(img_count)
+				local_pic_url = local_image_repo+local_pic_name
+				local_pic_img_exist = os.path.exists(local_pic_url)
+				next_pic_url = local_image_repo+"%d.jpg" %(img_count+1)
 				next_pic_img_exist = os.path.exists(next_pic_url)
-				if next_pic_img_exist:
+				if local_pic_img_exist:
 					print("Image %d exists...\n" %(img_count))
 				else:
 					print("Downloading a image...\n%s\nThe local file is %s\n" %(curr_pic_url, local_pic_url))
-					my_img.download_image( curr_pic_url, image_repo, "%d.jpg" %(img_count) )
-				
-				line = line.replace( curr_pic_url, local_pic_url)
+					#my_img.download_image_urllib( curr_pic_url, local_image_repo, "%d.jpg" %(img_count) )
+					succ_down = my_img.download_image_request(curr_pic_url, local_image_repo, local_pic_name)
+					if not succ_down:
+						local_pic_url = local_bad_img_url
+
+				line = line.replace( curr_pic_url, local_pic_url )
 				output_fp.write(line)
+				# add a line of html code to show the image
+				#print "Modify"
 				show_image_html = my_html.get_show_img_html(local_pic_url)
 				output_fp.write(show_image_html)
 			else:
 				output_fp.write(line)
 
 	output_fp.close()
+	#my_html.show_global_list()
 	print("HTML Converter Ends!")
 	return
 

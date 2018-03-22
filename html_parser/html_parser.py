@@ -2,9 +2,21 @@
 import sys
 import re
 #import PIL
-#from PIL import Image
+from PIL import Image
 reload(sys)
 sys.setdefaultencoding("utf-8")
+
+global height_list
+
+def init_global_list():
+	global height_list
+	height_list = []
+	return
+
+def show_global_list():
+	global height_list
+	print height_list
+	return
 
 def div_match(line):
 	"""
@@ -31,14 +43,44 @@ def pic_match(line):
 	else:
 		return True
 
+def get_altered_img_height(org_height):
+	#res_height = 400
+	if org_height > 1000:
+		res_height = 1400
+	elif org_height > 500:
+		res_height = 380
+	else:
+		res_height = 280
+
+	return res_height
+
+
 def get_show_img_html(img_url):
+	global height_list
+
+	bad_img_url = "./resources/bad_img.png"
 	res_code = ""
-	#img = Image.open(img_url)
-	#print(img.size)
-	res_code += "\t<br>\n\t<div><img src=\"%s\" width=\"230\" height=\"400\"/></div>\n" %(img_url)
+	try:
+		img = Image.open(img_url)
+	except Exception as e:
+		img = Image.open(bad_img_url)
+
+	img_size = img.size
+	img_ratio = (img_size[0]+0.0) / (img_size[1]+0.0)
+	#print img_ratio
+	org_height = img_size[1]
+	height_list.append(org_height)
+	height = get_altered_img_height(org_height)
+	width = height * img_ratio
+
+	while (width > 700):
+		org_height /= 1.2
+		height = get_altered_img_height(org_height)
+		width = height * img_ratio
+
+	res_code += "\t<br>\n\t<div><img src=\"%s\" width=\"%d\" height=\"%d\"/></div>\n" %(img_url, width, height)
 
 	return res_code
-
 
 
 def tester_main():
