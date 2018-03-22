@@ -1,7 +1,7 @@
 # HTML FILE Parser
-		The repo contains the html file parser.<br>
-		Recently, the developer for an iOS app 'Nian' has claimed that he is going to stop the Nian's service. If you were an user, you may want to download all your past post. Otherwise, when the app service stops, your data will get lost.<br>
-		'Nian' provides you a download link to download your post book. However, for these post books, your cannot see your uploaded photos. These photos are just some URLs linked to the images, which are still stored in their servers.<br>
+The repo contains the html file parser.<br>
+Recently, the developer for an iOS app 'Nian' has claimed that he is going to stop the Nian's service. If you were an user, you may want to download all your past post. Otherwise, when the app service stops, your data will get lost.<br>
+'Nian' provides you a download link to download your post book. However, for these post books, your cannot see your uploaded photos. These photos are just some URLs linked to the images, which are still stored in their servers.<br>
 This tool is used to automate the process to download the images in a html file, store them locally, and modify the html file to make these images visible.<br>
 
 # How to use it
@@ -28,4 +28,4 @@ After that, you go and grap a cup of coffer. When you come back, your output fil
 
 # Where are my photos
 All your photos are stored in the 'resources' directory. Each repo is named the same as its html file's name.<br>
-Hope you like it!<br>
+		Hope you like it!
