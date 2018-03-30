@@ -23,7 +23,7 @@ If you are cool people, you should always use command line to do things, even wh
 (4) Run this tool<br>
 Let's assume that you are in the html_parser directory (inside your terminal). The target html file is called 'simple\_example.html'.<br>
 You can run this tool by typing the following into your terminal:<br>
-```bash+
+```bash
 $ python nian_converter.py
 ```
 Then, the tool will ask you to pass the file name.<br>
